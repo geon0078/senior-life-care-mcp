@@ -1,0 +1,92 @@
+{
+  "name": "시니어 라이프 케어",
+  "description": "어르신의 일상을 함께하는 AI 동반자. 연금, 건강, 돌봄, 여가, 생활, 안전 등 시니어 복지 정보를 한 곳에서 편리하게 안내받으세요.",
+  "version": "1.0.0",
+  "author": "euphoria",
+  "category": "공공/복지",
+  "tags": ["시니어", "노인복지", "연금", "건강검진", "돌봄", "치매", "경로당", "복지관", "요양", "안전"],
+  "command": "node",
+  "args": ["dist/index.js"],
+  "tools": [
+    {
+      "name": "check_basic_pension",
+      "description": "기초연금 수급 자격 및 예상 금액 안내"
+    },
+    {
+      "name": "calculate_national_pension",
+      "description": "국민연금 예상 수령액 계산"
+    },
+    {
+      "name": "check_disability_pension",
+      "description": "장애인연금 수급 자격 안내"
+    },
+    {
+      "name": "check_veteran_benefits",
+      "description": "국가유공자 복지 혜택 안내"
+    },
+    {
+      "name": "check_health_screening",
+      "description": "국가건강검진 항목 및 일정 안내"
+    },
+    {
+      "name": "find_dementia_center",
+      "description": "치매안심센터 찾기 및 서비스 안내"
+    },
+    {
+      "name": "dementia_self_check",
+      "description": "간이 치매 자가진단 (KDSQ-P)"
+    },
+    {
+      "name": "find_senior_hospital",
+      "description": "어르신 친화 의료기관 찾기"
+    },
+    {
+      "name": "check_medical_expense_support",
+      "description": "의료비 지원 제도 안내"
+    },
+    {
+      "name": "check_long_term_care",
+      "description": "노인장기요양등급 및 서비스 안내"
+    },
+    {
+      "name": "find_care_service",
+      "description": "재가/방문 돌봄서비스 찾기"
+    },
+    {
+      "name": "find_nursing_home",
+      "description": "요양원/요양병원 찾기"
+    },
+    {
+      "name": "check_caregiver_support",
+      "description": "가족 돌봄자 지원 서비스 안내"
+    },
+    {
+      "name": "find_senior_center",
+      "description": "경로당/노인복지관 찾기"
+    },
+    {
+      "name": "get_welfare_programs",
+      "description": "복지관 프로그램 조회"
+    },
+    {
+      "name": "find_senior_education",
+      "description": "어르신 교육 프로그램 찾기"
+    },
+    {
+      "name": "check_housing_support",
+      "description": "주거지원 제도 안내"
+    },
+    {
+      "name": "find_meal_service",
+      "description": "경로식당/도시락 배달 서비스 찾기"
+    },
+    {
+      "name": "emergency_contacts",
+      "description": "긴급 연락처 안내"
+    },
+    {
+      "name": "check_safety_service",
+      "description": "독거노인 안전확인 서비스 안내"
+    }
+  ]
+}

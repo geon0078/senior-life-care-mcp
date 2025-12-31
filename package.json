@@ -1,0 +1,41 @@
+{
+  "name": "senior-life-care-mcp",
+  "version": "1.0.0",
+  "description": "시니어 라이프 케어 - 어르신의 일상을 함께하는 AI 동반자",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "start:stdio": "node dist/stdio.js",
+    "dev": "tsx src/index.ts",
+    "dev:stdio": "tsx src/stdio.ts",
+    "watch": "tsc --watch"
+  },
+  "keywords": [
+    "mcp",
+    "senior",
+    "welfare",
+    "korea",
+    "public-service"
+  ],
+  "author": "euphoria",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
