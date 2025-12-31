@@ -4,6 +4,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
@@ -200,6 +201,45 @@ app.post("/messages", async (req: Request, res: Response) => {
     console.error("메시지 처리 오류:", error);
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+// Streamable HTTP Transport를 위한 세션 저장소
+const httpTransports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
+
+// Streamable HTTP 엔드포인트 (PlayMCP 호환)
+app.post("/mcp", async (req: Request, res: Response) => {
+  console.log("MCP HTTP 요청 받음");
+
+  const sessionId = req.headers["mcp-session-id"] as string | undefined;
+  let transport: StreamableHTTPServerTransport;
+
+  if (sessionId && httpTransports[sessionId]) {
+    transport = httpTransports[sessionId];
+  } else {
+    transport = new StreamableHTTPServerTransport({
+      sessionIdGenerator: () => crypto.randomUUID(),
+      onsessioninitialized: (id) => {
+        httpTransports[id] = transport;
+        console.log(`HTTP 세션 생성: ${id}`);
+      }
+    });
+
+    const server = createMCPServer();
+    await server.connect(transport);
+  }
+
+  await transport.handleRequest(req, res, req.body);
+});
+
+// DELETE 요청으로 세션 종료
+app.delete("/mcp", async (req: Request, res: Response) => {
+  const sessionId = req.headers["mcp-session-id"] as string;
+  if (sessionId && httpTransports[sessionId]) {
+    await httpTransports[sessionId].close();
+    delete httpTransports[sessionId];
+    console.log(`HTTP 세션 종료: ${sessionId}`);
+  }
+  res.status(200).end();
 });
 
 // 서버 시작
