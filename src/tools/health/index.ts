@@ -1,4 +1,5 @@
 import { Tool } from "@modelcontextprotocol/sdk/types.js";
+import { findRegionData } from "../../utils/regionMatcher.js";
 
 // 건강/의료 관련 도구 정의
 export const healthTools: Tool[] = [
@@ -225,22 +226,23 @@ async function findDementiaCenter(
     ],
   };
 
-  let centers = sampleCenters[region] || [];
-
-  // 없으면 서울 광역센터 보여주기
-  if (centers.length === 0) {
-    centers = sampleCenters["서울"];
-  }
+  // 유연한 지역 매칭 사용
+  const regionResult = findRegionData(region, sampleCenters, "서울");
+  const centers = regionResult?.value || sampleCenters["서울"];
+  const matchedRegion = regionResult?.key || "서울";
+  const isMatched = regionResult?.matched || false;
 
   let result = `
 🧠 ${region || "전국"} 치매안심센터 안내
 
 `;
 
-  if (region && sampleCenters[region]) {
-    result += `📍 "${region}" 치매안심센터:\n\n`;
+  if (isMatched) {
+    result += `📍 "${matchedRegion}" 치매안심센터:\n\n`;
+  } else if (region) {
+    result += `💡 "${region}" 지역 정보를 찾기 어려워요.\n"${matchedRegion}" 대표 센터 정보를 안내해 드릴게요.\n\n`;
   } else {
-    result += `💡 "${region}" 지역 정보를 찾기 어려워요.\n대표 센터 정보를 안내해 드릴게요.\n\n`;
+    result += `📍 대표 치매안심센터:\n\n`;
   }
 
   centers.forEach((center, i) => {

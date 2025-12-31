@@ -1,4 +1,5 @@
 import { Tool } from "@modelcontextprotocol/sdk/types.js";
+import { findRegionData } from "../../utils/regionMatcher.js";
 
 // 일자리 관련 도구 정의
 export const jobsTools: Tool[] = [
@@ -368,20 +369,23 @@ async function findSeniorClub(
     ],
   };
 
-  let clubs = seniorClubs[region] || [];
-  if (clubs.length === 0 && seniorClubs["서울"]) {
-    clubs = seniorClubs["서울"];
-  }
+  // 유연한 지역 매칭 사용
+  const regionResult = findRegionData(region, seniorClubs, "서울");
+  const clubs = regionResult?.value || seniorClubs["서울"];
+  const matchedRegion = regionResult?.key || "서울";
+  const isMatched = regionResult?.matched || false;
 
   let result = `
 🏢 ${region || "전국"} 시니어클럽 안내
 
 `;
 
-  if (region && seniorClubs[region]) {
-    result += `📍 "${region}" 시니어클럽:\n\n`;
+  if (isMatched) {
+    result += `📍 "${matchedRegion}" 시니어클럽:\n\n`;
+  } else if (region) {
+    result += `💡 "${region}" 정확한 정보를 찾기 어려워요.\n"${matchedRegion}" 대표 센터 정보를 안내해 드릴게요.\n\n`;
   } else {
-    result += `💡 "${region}" 정확한 정보를 찾기 어려워요.\n대표 센터 정보를 안내해 드릴게요.\n\n`;
+    result += `📍 대표 시니어클럽:\n\n`;
   }
 
   clubs.forEach((club, i) => {
