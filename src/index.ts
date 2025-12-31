@@ -146,6 +146,7 @@ app.get("/", (_req: Request, res: Response) => {
     version: "1.0.0",
     description: "어르신의 일상을 함께하는 AI 동반자",
     endpoints: {
+      mcp: "/mcp",
       sse: "/sse",
       messages: "/messages",
       health: "/health",
@@ -208,7 +209,7 @@ const httpTransports: { [sessionId: string]: StreamableHTTPServerTransport } = {
 
 // Streamable HTTP 엔드포인트 (PlayMCP 호환)
 app.post("/mcp", async (req: Request, res: Response) => {
-  console.log("MCP HTTP 요청 받음");
+  console.log("MCP HTTP POST 요청 받음");
 
   const sessionId = req.headers["mcp-session-id"] as string | undefined;
   let transport: StreamableHTTPServerTransport;
@@ -229,6 +230,30 @@ app.post("/mcp", async (req: Request, res: Response) => {
   }
 
   await transport.handleRequest(req, res, req.body);
+});
+
+// GET 요청 - SSE 스트림 또는 정보 반환
+app.get("/mcp", async (req: Request, res: Response) => {
+  const sessionId = req.headers["mcp-session-id"] as string | undefined;
+
+  if (sessionId && httpTransports[sessionId]) {
+    console.log("MCP HTTP GET 요청 - SSE 스트림");
+    const transport = httpTransports[sessionId];
+    await transport.handleRequest(req, res);
+  } else {
+    // 세션이 없으면 MCP 정보 반환
+    res.json({
+      jsonrpc: "2.0",
+      result: {
+        protocolVersion: "2024-11-05",
+        capabilities: { tools: {} },
+        serverInfo: {
+          name: "senior-life-care-mcp",
+          version: "1.0.0"
+        }
+      }
+    });
+  }
 });
 
 // DELETE 요청으로 세션 종료
