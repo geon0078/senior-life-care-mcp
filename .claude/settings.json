@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "senior-life-care": {
+      "command": "node",
+      "args": ["D:\\github\\playmcp-kakao\\senior-life-care-mcp\\dist\\stdio.js"]
+    }
+  }
+}
